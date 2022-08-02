@@ -182,6 +182,80 @@ class TermsCtrl {
       next(error);
     }
   };
+
+  update = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { termId } = req.params;
+      const { _id } = req.user!;
+
+      const updatedTerm = await Term.findOneAndUpdate(
+        {
+          owner: _id,
+          _id: termId,
+        },
+        req.body,
+        { new: true }
+      );
+
+      if (!updatedTerm) {
+        throw new NotFound(`Term with id=${termId} not found`);
+      }
+
+      const json: IJsonResponse<object> = {
+        statusMessage: "Success",
+        statusCode: 200,
+        data: updatedTerm,
+      };
+      res.json(json);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getOne = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { termId } = req.params;
+      const { _id } = req.user!;
+
+      const term = await Term.findOne({
+        owner: _id,
+        _id: termId,
+      });
+
+      if (!term) {
+        throw new NotFound(`Term with id=${termId} not found`);
+      }
+
+      const json: IJsonResponse<object> = {
+        statusMessage: "Success",
+        statusCode: 200,
+        data: term,
+      };
+      res.json(json);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  delete = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { termId } = req.params;
+      const { _id } = req.user!;
+
+      const deletedTerm = await Term.findOneAndDelete({
+        owner: _id,
+        _id: termId,
+      });
+
+      if (!deletedTerm) {
+        throw new NotFound(`Term with id=${termId} not found`);
+      }
+
+      res.status(204).json();
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export { TermsCtrl };

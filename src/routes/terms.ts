@@ -1,6 +1,10 @@
 import express from "express";
 import { Middleware } from "middleware/Middleware";
-import { validationTermSchema, validationChangeLevelSchema } from "models";
+import {
+  validationTermSchema,
+  validationChangeLevelSchema,
+  validationUpdateTermSchema,
+} from "models";
 import { TermsCtrl } from "controllers";
 
 const middleware = new Middleware();
@@ -18,5 +22,11 @@ termsRouter.patch(
   middleware.validation(validationChangeLevelSchema),
   termsCtrl.changeTermLevel
 );
+
+termsRouter.patch("/:termId", middleware.validation(validationUpdateTermSchema), termsCtrl.update);
+
+termsRouter.get("/:termId", termsCtrl.getOne);
+
+termsRouter.delete("/:termId", termsCtrl.delete);
 
 export { termsRouter };

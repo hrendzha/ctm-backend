@@ -2,12 +2,22 @@ import { Schema, model } from "mongoose";
 import Joi from "joi";
 import { ChangeLevelActions } from "enums";
 
+const TERM_FIELDS_LENGTH = {
+  term: {
+    min: 1,
+    max: 1000,
+  },
+  definition: {
+    min: 1,
+    max: 1000,
+  },
+};
 export const TERM_LEVELS_ARRAY: readonly [0, 1, 2, 3, 4, 5, 6] = [0, 1, 2, 3, 4, 5, 6];
 export type TermLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface ITerm {
   owner: Schema.Types.ObjectId;
-  word: string;
+  term: string;
   definition: string;
   imageUrl: string;
   level: TermLevel;
@@ -24,17 +34,17 @@ const termSchema = new Schema<ITerm>(
       ref: "user",
       required: true,
     },
-    word: {
+    term: {
       type: String,
-      minlength: 1,
-      maxlength: 1000,
-      required: [true, "word required"],
+      minlength: TERM_FIELDS_LENGTH.term.min,
+      maxlength: TERM_FIELDS_LENGTH.term.max,
+      required: [true, "term required"],
       trim: true,
     },
     definition: {
       type: String,
-      minlength: 1,
-      maxlength: 1000,
+      minlength: TERM_FIELDS_LENGTH.definition.min,
+      maxlength: TERM_FIELDS_LENGTH.definition.max,
       required: [true, "definition required"],
       trim: true,
     },
@@ -61,8 +71,18 @@ const termSchema = new Schema<ITerm>(
 );
 
 const validationTermSchema = Joi.object({
-  word: Joi.string().min(1).max(1000).required(),
-  definition: Joi.string().min(1).max(1000).required(),
+  term: Joi.string().min(TERM_FIELDS_LENGTH.term.min).max(TERM_FIELDS_LENGTH.term.max).required(),
+  definition: Joi.string()
+    .min(TERM_FIELDS_LENGTH.definition.min)
+    .max(TERM_FIELDS_LENGTH.definition.max)
+    .required(),
+});
+
+const validationUpdateTermSchema = Joi.object({
+  term: Joi.string().min(TERM_FIELDS_LENGTH.term.min).max(TERM_FIELDS_LENGTH.term.max),
+  definition: Joi.string()
+    .min(TERM_FIELDS_LENGTH.definition.min)
+    .max(TERM_FIELDS_LENGTH.definition.max),
 });
 
 const validationChangeLevelSchema = Joi.object({
@@ -73,4 +93,4 @@ const validationChangeLevelSchema = Joi.object({
 
 const Term = model<ITerm>("term", termSchema);
 
-export { Term, validationTermSchema, validationChangeLevelSchema };
+export { Term, validationTermSchema, validationChangeLevelSchema, validationUpdateTermSchema };
