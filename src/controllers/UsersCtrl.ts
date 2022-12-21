@@ -5,7 +5,7 @@ import { v4 as generateRandomString } from "uuid";
 import { Unauthorized, Forbidden, NotFound, BadRequest } from "http-errors";
 import path from "path";
 import fs from "fs/promises";
-import Jimp from "Jimp";
+// import Jimp from "Jimp";
 import { IUser, User, Subscription } from "../models";
 import { EmailSender } from "../utils";
 import { IJsonResponse, IEmailSenderData, IError, IJwtPayload } from "../interfaces";
@@ -190,8 +190,8 @@ class UsersCtrl {
     const avatarURL = path.join("avatars", uniqFileName);
 
     try {
-      const img = await Jimp.read(temporaryFilePath);
-      img.resize(250, 250).write(permanentFileLocation);
+      //   const img = await Jimp.read(temporaryFilePath);
+      //   img.resize(250, 250).write(permanentFileLocation);
       const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
 
       const json: IJsonResponse<object> = {
