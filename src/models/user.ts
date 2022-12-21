@@ -90,8 +90,10 @@ const joiUserSchema = Joi.object({
 
 const joiSignUpSchema = Joi.object({
   name: Joi.string().required().min(2).max(35),
-  password: Joi.string().required(),
-  email: Joi.string().email().required(),
+  password: Joi.string().required().min(7),
+  email: Joi.string().email().required().messages({
+    "string.email": "Email must be a valid email",
+  }),
 });
 
 const joiAuthSchema = Joi.object({

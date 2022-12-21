@@ -22,13 +22,14 @@ class UsersCtrl {
       const user = await User.findOne({ email });
 
       if (user) {
-        res.status(409).json({
-          statusMessage: `Email ${email} in use`,
+        const json: IJsonResponse<object> = {
+          statusMessage: `This email is already taken`,
           statusCode: 409,
           data: {
             fieldInWhichErrorOccurred: "email",
           },
-        } as IJsonResponse<object>);
+        };
+        res.status(409).json(json);
         return;
       }
 
@@ -94,10 +95,9 @@ class UsersCtrl {
         statusCode: 200,
         data: {
           token,
-          user: {
-            email: user.email,
-            subscription: user.subscription,
-          },
+          name: user.name,
+          email: user.email,
+          subscription: user.subscription,
         },
       };
       res.json(json);
@@ -108,12 +108,12 @@ class UsersCtrl {
 
   getCurrent = (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { email, subscription, avatarURL } = req.user as IUser;
+      const { name, email, subscription, avatarURL, token } = req.user as IUser;
 
       const json: IJsonResponse<object> = {
         statusMessage: "Success",
         statusCode: 200,
-        data: { email, subscription, avatarURL },
+        data: { name, email, subscription, avatarURL, token },
       };
       res.json(json);
     } catch (error) {
