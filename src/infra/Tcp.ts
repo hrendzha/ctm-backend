@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import path from "path";
-import morgan from "morgan";
 import { IError, IJsonResponse } from "../interfaces";
 import { usersRouter, termsRouter } from "../routes";
 import { Middleware } from "../middleware/Middleware";
@@ -28,7 +27,10 @@ class Tcp {
     server.use(express.static(path.join(process.cwd(), "public")));
     server.use(cors());
     server.use(express.json());
-    server.use(morgan(server.get("env") !== "production" ? "dev" : "short"));
+    if (process.env.NODE_ENV !== "production") {
+      const logger = require("morgan");
+      server.use(logger("dev"));
+    }
 
     server.use("/api/users", usersRouter);
     server.use("/api/terms", middleware.auth, termsRouter);
