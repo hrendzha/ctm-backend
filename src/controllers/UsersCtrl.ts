@@ -14,7 +14,7 @@ import { getEmailConfirmationHtmlTemplate } from "../html-email-templates";
 class UsersCtrl {
   private isVerificationRequired = false;
   private SECRET_KEY = process.env.SECRET_KEY as string;
-  private IMAGE_STORE = path.join(process.cwd(), "public", "avatars");
+  //   private IMAGE_STORE = path.join(process.cwd(), "public", "avatars");
 
   signUp = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -186,7 +186,7 @@ class UsersCtrl {
 
     const fileExtension = mimetype.slice(mimetype.lastIndexOf("/") + 1);
     const uniqFileName = `${_id}.${fileExtension}`;
-    const permanentFileLocation = path.join(this.IMAGE_STORE, uniqFileName);
+    // const permanentFileLocation = path.join(this.IMAGE_STORE, uniqFileName);
     const avatarURL = path.join("avatars", uniqFileName);
 
     try {
