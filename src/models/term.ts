@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
-import { ChangeLevelActions } from "enums";
+import { ChangeLevelActions } from "../enums";
 
 const TERM_FIELDS_LENGTH = {
   term: {

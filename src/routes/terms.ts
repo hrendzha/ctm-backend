@@ -1,11 +1,11 @@
 import express from "express";
-import { Middleware } from "middleware/Middleware";
+import { Middleware } from "../middleware/Middleware";
 import {
   validationTermSchema,
   validationChangeLevelSchema,
   validationUpdateTermSchema,
-} from "models";
-import { TermsCtrl } from "controllers";
+} from "../models";
+import { TermsCtrl } from "../controllers";
 
 const middleware = new Middleware();
 const termsRouter = express.Router();

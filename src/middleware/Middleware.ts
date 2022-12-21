@@ -4,8 +4,8 @@ import { Unauthorized } from "http-errors";
 import Joi from "joi";
 import multer from "multer";
 import path from "path";
-import { User } from "models";
-import { IJwtPayload, IError } from "interfaces";
+import { User } from "../models";
+import { IJwtPayload, IError } from "../interfaces";
 
 class Middleware {
   private static instance: Middleware;

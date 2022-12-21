@@ -1,7 +1,7 @@
 import express from "express";
-import { Middleware } from "middleware/Middleware";
-import { joiSignUpSchema, joiAuthSchema, joiSubscriptionSchema, joiEmailSchema } from "models";
-import { UsersCtrl } from "controllers";
+import { Middleware } from "../middleware/Middleware";
+import { joiSignUpSchema, joiAuthSchema, joiSubscriptionSchema, joiEmailSchema } from "../models";
+import { UsersCtrl } from "../controllers";
 
 const middleware = new Middleware();
 const usersRouter = express.Router();

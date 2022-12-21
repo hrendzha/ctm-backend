@@ -1,5 +1,5 @@
 import { daysToMilliseconds } from "./daysToMilliseconds";
-import { TERM_LEVELS_ARRAY } from "models";
+import { TERM_LEVELS_ARRAY } from "../models";
 
 const DISAPPEARANCE_TERM_DATE_BY_LEVELS = {
   [TERM_LEVELS_ARRAY[0]]: 0,

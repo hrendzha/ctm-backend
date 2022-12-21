@@ -1,5 +1,5 @@
 import sgMail, { MailDataRequired } from "@sendgrid/mail";
-import { IEmailSenderData } from "interfaces";
+import { IEmailSenderData } from "../interfaces";
 
 const { SENDGRID_API_KEY } = process.env;
 sgMail.setApiKey(SENDGRID_API_KEY as string);

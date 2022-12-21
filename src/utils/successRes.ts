@@ -1,4 +1,4 @@
-import { IJsonResponse } from "interfaces";
+import { IJsonResponse } from "../interfaces";
 
 const successRes = <T>(data: T): IJsonResponse<T> => ({
   statusMessage: "success",

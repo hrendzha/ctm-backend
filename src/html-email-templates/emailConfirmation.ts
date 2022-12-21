@@ -1,4 +1,4 @@
-import { DOMAIN_NAME } from "utils";
+import { DOMAIN_NAME } from "../utils";
 
 const getEmailConfirmationHtmlTemplate = (verificationToken: string) => `
   <div>
