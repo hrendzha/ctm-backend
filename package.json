@@ -5,8 +5,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "cross-env NODE_ENV=production node ./dist/main.js",
-    "dev": "cross-env NODE_ENV=development nodemon",
-    "install": "npm install"
+    "dev": "cross-env NODE_ENV=development nodemon"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.1",
