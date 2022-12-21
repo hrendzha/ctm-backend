@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { NotFound } from "http-errors";
-import { Term, TERM_LEVELS_ARRAY, TermLevel } from "models";
-import { IError, IJsonResponse } from "interfaces";
-import { ChangeLevelActions } from "enums";
-import { DISAPPEARANCE_TERM_DATE_BY_LEVELS } from "utils";
+import { Term, TERM_LEVELS_ARRAY, TermLevel } from "../models";
+import { IError, IJsonResponse } from "../interfaces";
+import { ChangeLevelActions } from "../enums";
+import { DISAPPEARANCE_TERM_DATE_BY_LEVELS } from "../utils";
 
 class TermsCtrl {
   private readonly MIN_TERM_LEVEL = TERM_LEVELS_ARRAY[0];

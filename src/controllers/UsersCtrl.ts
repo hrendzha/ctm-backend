@@ -6,10 +6,10 @@ import { Unauthorized, Forbidden, NotFound, BadRequest } from "http-errors";
 import path from "path";
 import fs from "fs/promises";
 import Jimp from "Jimp";
-import { IUser, User, Subscription } from "models";
-import { EmailSender } from "utils";
-import { IJsonResponse, IEmailSenderData, IError, IJwtPayload } from "interfaces";
-import { getEmailConfirmationHtmlTemplate } from "html-email-templates";
+import { IUser, User, Subscription } from "../models";
+import { EmailSender } from "../utils";
+import { IJsonResponse, IEmailSenderData, IError, IJwtPayload } from "../interfaces";
+import { getEmailConfirmationHtmlTemplate } from "../html-email-templates";
 
 class UsersCtrl {
   private isVerificationRequired = false;

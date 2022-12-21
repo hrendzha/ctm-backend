@@ -3,8 +3,8 @@ import cors from "cors";
 import path from "path";
 import morgan from "morgan";
 import { IError, IJsonResponse } from "interfaces";
-import { usersRouter, termsRouter } from "routes";
-import { Middleware } from "middleware/Middleware";
+import { usersRouter, termsRouter } from "../routes";
+import { Middleware } from "../middleware/Middleware";
 
 class Tcp {
   private static instance: Tcp;
