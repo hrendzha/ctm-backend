@@ -11,6 +11,9 @@ const TERM_FIELDS_LENGTH = {
     min: 1,
     max: 1000,
   },
+  imageUrl: {
+    max: 1000,
+  },
 };
 export const TERM_LEVELS_ARRAY: readonly [0, 1, 2, 3, 4, 5, 6] = [0, 1, 2, 3, 4, 5, 6];
 export type TermLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6;
@@ -50,7 +53,9 @@ const termSchema = new Schema<ITerm>(
     },
     imageUrl: {
       type: String,
+      maxlength: TERM_FIELDS_LENGTH.imageUrl.max,
       default: "",
+      trim: true,
     },
     level: {
       type: Number,
@@ -76,6 +81,7 @@ const validationTermSchema = Joi.object({
     .min(TERM_FIELDS_LENGTH.definition.min)
     .max(TERM_FIELDS_LENGTH.definition.max)
     .required(),
+  imageUrl: Joi.string().max(TERM_FIELDS_LENGTH.imageUrl.max),
 });
 
 const validationUpdateTermSchema = Joi.object({
@@ -83,6 +89,7 @@ const validationUpdateTermSchema = Joi.object({
   definition: Joi.string()
     .min(TERM_FIELDS_LENGTH.definition.min)
     .max(TERM_FIELDS_LENGTH.definition.max),
+  imageUrl: Joi.string().empty("").max(TERM_FIELDS_LENGTH.imageUrl.max),
 });
 
 const validationChangeLevelSchema = Joi.object({

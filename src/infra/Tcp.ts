@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import path from "path";
 import { IError, IJsonResponse } from "../interfaces";
-import { usersRouter, termsRouter } from "../routes";
+import { usersRouter, termsRouter, imagesRouter } from "../routes";
 import { Middleware } from "../middleware/Middleware";
 
 class Tcp {
@@ -34,6 +34,8 @@ class Tcp {
 
     server.use("/api/users", usersRouter);
     server.use("/api/terms", middleware.auth, termsRouter);
+    server.use("/api/images", middleware.auth, imagesRouter);
+
     server.use((req, res) => {
       const json: IJsonResponse<null> = {
         statusMessage: `Not found address ${req.url}`,
