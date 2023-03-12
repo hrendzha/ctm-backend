@@ -35,6 +35,8 @@ class ImagesCtrl {
       }
       const data: IData = await response.json();
 
+      console.log(`data`, data);
+
       const json: IJsonResponse<object> = {
         statusMessage: "Success",
         statusCode: 200,
