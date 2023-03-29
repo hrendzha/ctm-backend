@@ -13,8 +13,7 @@ class TermsCtrl {
     try {
       const { _id } = req.user!;
 
-      const terms = await Term.find({ owner: _id });
-
+      const terms = await Term.find({ owner: _id }).sort({ createdAt: -1 });
       const json: IJsonResponse<object> = {
         statusMessage: "Success",
         statusCode: 200,
@@ -44,13 +43,7 @@ class TermsCtrl {
         const differenceBetweenDate = Date.now() - dateLevelWasChangedInMilliseconds;
         const isTimeUp = differenceBetweenDate >= DISAPPEARANCE_TERM_DATE_BY_LEVELS[term.level];
 
-        for (const LEVEL of TERM_LEVELS_ARRAY) {
-          if (term.level === LEVEL && isTimeUp) {
-            return true;
-          }
-        }
-
-        return false;
+        return isTimeUp;
       });
 
       const json: IJsonResponse<object> = {
