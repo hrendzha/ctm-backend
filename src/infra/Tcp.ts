@@ -25,7 +25,11 @@ class Tcp {
     const { server, middleware } = this;
 
     server.use(express.static(path.join(process.cwd(), "public")));
-    server.use(cors());
+    server.use(
+      cors({
+        origin: process.env.NODE_ENV === "production" ? "https://ctm-front.netlify.app" : "*",
+      })
+    );
     server.use(express.json());
     if (process.env.NODE_ENV !== "production") {
       const logger = require("morgan");
