@@ -87,7 +87,7 @@ class UsersCtrl {
       }
 
       const payload: IJwtPayload = { id: user._id };
-      const token = jwt.sign(payload, this.SECRET_KEY, { expiresIn: "8h" });
+      const token = jwt.sign(payload, this.SECRET_KEY, { expiresIn: "2d" });
       await User.findByIdAndUpdate(user._id, { token });
 
       const json: IJsonResponse<object> = {
