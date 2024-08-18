@@ -1,4 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
+import https from "https";
+import fs from "fs";
 import cors from "cors";
 import path from "path";
 import { IError, IJsonResponse } from "../interfaces";
@@ -66,11 +68,24 @@ class Tcp {
 
     return new Promise<boolean>((res: Function, rej: Function) => {
       try {
-        server.listen(PORT, () => {
-          console.log(`Tcp service running on port ${PORT}`);
+        if (process.env.NODE_ENV !== "production") {
+          server.listen(PORT, () => {
+            console.log(`Tcp service running on port ${PORT}`);
 
-          return res(true);
-        });
+            return res(true);
+          });
+        } else {
+          const options = {
+            key: fs.readFileSync("/etc/letsencrypt/live/158.220.115.173/privkey.pem"),
+            cert: fs.readFileSync("/etc/letsencrypt/live/158.220.115.173/fullchain.pem"),
+          };
+
+          https.createServer(options, server).listen(PORT, () => {
+            console.log(`HTTPS server listening on port ${PORT}`);
+
+            return res(true);
+          });
+        }
       } catch (error) {
         console.log(`Tcp service not running`, error);
         rej(error);
