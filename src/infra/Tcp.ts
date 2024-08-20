@@ -76,8 +76,8 @@ class Tcp {
           });
         } else {
           const options = {
-            key: fs.readFileSync("/etc/letsencrypt/live/158.220.115.173/privkey.pem"),
-            cert: fs.readFileSync("/etc/letsencrypt/live/158.220.115.173/fullchain.pem"),
+            key: fs.readFileSync("/etc/letsencrypt/live/ctm-api.online/privkey.pem"),
+            cert: fs.readFileSync("/etc/letsencrypt/live/ctm-api.online/fullchain.pem"),
           };
 
           https.createServer(options, server).listen(PORT, () => {
