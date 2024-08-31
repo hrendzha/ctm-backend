@@ -21,4 +21,5 @@ jobs:
           git pull origin main
           git status
           npm ci
-          pm2 restart ctm-back
+          npm run build
+          pm2 restart ctm
