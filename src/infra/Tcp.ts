@@ -44,7 +44,7 @@ class Tcp {
 
     server.use((req, res) => {
       const json: IJsonResponse<null> = {
-        statusMessage: `Not found address 3 ${req.url}`,
+        statusMessage: `Not found address 4 ${req.url}`,
         statusCode: 404,
         data: null,
       };
