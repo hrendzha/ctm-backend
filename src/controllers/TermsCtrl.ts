@@ -12,13 +12,28 @@ class TermsCtrl {
   getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { _id } = req.user!;
+      const { page = 1, perPage = 10 } = req.query;
 
-      const terms = await Term.find({ owner: _id }).sort({ createdAt: -1 });
+      const pageNum = Number(page);
+      const perPageNum = Number(perPage);
+      const skip = pageNum * perPageNum;
+
+      const filterQuery = { owner: _id };
+
+      const terms = await Term.find(filterQuery)
+        .skip(skip)
+        .limit(perPageNum)
+        .sort({ createdAt: -1 })
+        .exec();
+
+      const totalItems = await Term.countDocuments(filterQuery);
+
       const json: IJsonResponse<object> = {
         statusMessage: "Success",
         statusCode: 200,
         data: {
           items: terms,
+          totalItems,
         },
       };
       res.json(json);

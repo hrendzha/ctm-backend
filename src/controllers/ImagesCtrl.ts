@@ -18,6 +18,7 @@ class ImagesCtrl {
         sort: "relevance",
         extras: "url_m",
         text: String(searchQuery),
+        // tags: String(searchQuery),
         page: String(page),
         per_page: String(perPage),
       });
