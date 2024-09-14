@@ -1,24 +1,64 @@
 import { Request, Response, NextFunction } from "express";
+import { Schema, FilterQuery } from "mongoose";
 import { NotFound } from "http-errors";
-import { Term, TERM_LEVELS_ARRAY, TermLevel } from "../models";
+import { ITerm, Term, TERM_LEVELS_ARRAY, TermLevel } from "../models";
 import { IError, IJsonResponse } from "../interfaces";
 import { ChangeLevelActions } from "../enums";
 import { DISAPPEARANCE_TERM_DATE_BY_LEVELS } from "../utils";
+
+interface ICardsListFilter {
+  page?: number;
+  perPage?: number;
+  searchQuery?: string;
+  level?: TermLevel;
+}
 
 class TermsCtrl {
   private readonly MIN_TERM_LEVEL = TERM_LEVELS_ARRAY[0];
   private readonly MAX_TERM_LEVEL = TERM_LEVELS_ARRAY[TERM_LEVELS_ARRAY.length - 1];
 
-  getAll = async (req: Request, res: Response, next: NextFunction) => {
+  getAll = async (
+    req: Request<{}, {}, {}, ICardsListFilter>,
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       const { _id } = req.user!;
+      const { page = 1, perPage = 10, searchQuery = "", level } = req.query;
 
-      const terms = await Term.find({ owner: _id }).sort({ createdAt: -1 });
+      const pageNum = Number(page);
+      const perPageNum = Number(perPage);
+      const skip = pageNum * perPageNum;
+
+      const filterQuery: FilterQuery<ITerm> = {
+        owner: _id,
+      };
+
+      if (level !== undefined) {
+        filterQuery.level = level;
+      }
+
+      if (searchQuery.trim()) {
+        filterQuery.$or = [
+          { term: { $regex: searchQuery, $options: "i" } }, // Case-insensitive search in 'term'
+          { definition: { $regex: searchQuery, $options: "i" } }, // Case-insensitive search in 'definition'
+        ];
+      }
+
+      const terms = await Term.find(filterQuery)
+        .skip(skip)
+        .limit(perPageNum)
+        .sort({ createdAt: -1 })
+        .exec();
+
+      const totalItems = await Term.countDocuments(filterQuery);
+
       const json: IJsonResponse<object> = {
         statusMessage: "Success",
         statusCode: 200,
         data: {
           items: terms,
+          totalItems,
         },
       };
       res.json(json);
