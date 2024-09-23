@@ -17,18 +17,21 @@ const TERM_FIELDS_LENGTH = {
 };
 export const TERM_LEVELS_ARRAY: readonly [0, 1, 2, 3, 4, 5, 6] = [0, 1, 2, 3, 4, 5, 6];
 export type TermLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6;
-
 export interface ITerm {
   owner: Schema.Types.ObjectId;
   term: string;
   definition: string;
   imageUrl: string;
   level: TermLevel;
-  dateLevelWasChanged?: Date;
+  dateLevelWasChanged?: Date | number | null;
   differenceBetweenDate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type TermForUpdate = Partial<
+  Pick<ITerm, "term" | "definition" | "level" | "dateLevelWasChanged" | "imageUrl">
+>;
 
 const termSchema = new Schema<ITerm>(
   {
@@ -90,6 +93,7 @@ const validationUpdateTermSchema = Joi.object({
     .min(TERM_FIELDS_LENGTH.definition.min)
     .max(TERM_FIELDS_LENGTH.definition.max),
   imageUrl: Joi.string().empty("").max(TERM_FIELDS_LENGTH.imageUrl.max),
+  level: Joi.number().valid(...TERM_LEVELS_ARRAY),
 });
 
 const validationChangeLevelSchema = Joi.object({
