@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { Schema, FilterQuery } from "mongoose";
+import { FilterQuery } from "mongoose";
 import { NotFound } from "http-errors";
-import { ITerm, Term, TERM_LEVELS_ARRAY, TermLevel } from "../models";
+import { ITerm, Term, TERM_LEVELS_ARRAY, TermForUpdate, TermLevel } from "../models";
 import { IError, IJsonResponse } from "../interfaces";
 import { ChangeLevelActions } from "../enums";
 import { DISAPPEARANCE_TERM_DATE_BY_LEVELS } from "../utils";
@@ -77,9 +77,15 @@ class TermsCtrl {
         if (term.level === this.MIN_TERM_LEVEL) return true;
         if (term.level === this.MAX_TERM_LEVEL) return false;
 
-        const dateLevelWasChangedInMilliseconds = Date.parse(
-          term.dateLevelWasChanged?.toDateString()!
-        );
+        if (!term.dateLevelWasChanged) {
+          return true;
+        }
+
+        const dateLevelWasChangedInMilliseconds =
+          typeof term.dateLevelWasChanged === "number"
+            ? term.dateLevelWasChanged
+            : Date.parse(term.dateLevelWasChanged.toDateString());
+
         const differenceBetweenDate = Date.now() - dateLevelWasChangedInMilliseconds;
         const isTimeUp = differenceBetweenDate >= DISAPPEARANCE_TERM_DATE_BY_LEVELS[term.level];
 
@@ -221,12 +227,18 @@ class TermsCtrl {
       const { termId } = req.params;
       const { _id } = req.user!;
 
+      const update = structuredClone(req.body as TermForUpdate);
+
+      if (update.level !== undefined) {
+        update.dateLevelWasChanged = null;
+      }
+
       const updatedTerm = await Term.findOneAndUpdate(
         {
           owner: _id,
           _id: termId,
         },
-        req.body,
+        update,
         { new: true }
       );
 
