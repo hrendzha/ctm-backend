@@ -9,6 +9,7 @@ import { DISAPPEARANCE_TERM_DATE_BY_LEVELS } from "../utils";
 interface ICardsListFilter {
   page?: number;
   perPage?: number;
+  sort?: string;
   searchQuery?: string;
   level?: TermLevel;
 }
@@ -24,7 +25,7 @@ class TermsCtrl {
   ) => {
     try {
       const { _id } = req.user!;
-      const { page = 1, perPage = 10, searchQuery = "", level } = req.query;
+      const { page = 1, perPage = 10, searchQuery = "", level, sort } = req.query;
 
       const pageNum = Number(page);
       const perPageNum = Number(perPage);
@@ -45,10 +46,28 @@ class TermsCtrl {
         ];
       }
 
+      interface ISort {
+        createdAt?: string | number;
+        dateLevelWasChanged?: string | number;
+      }
+      let sortArguments: ISort = { createdAt: "desc" };
+
+      if (sort === "createAsc") {
+        sortArguments = { createdAt: "asc" };
+      } else if (sort === "createDesc") {
+        sortArguments = { createdAt: "desc" };
+      } else if (sort === "lvlChangeAsc") {
+        sortArguments = { dateLevelWasChanged: "asc" };
+      } else if (sort === "lvlChangeDesc") {
+        sortArguments = { dateLevelWasChanged: "desc" };
+      }
+
+      console.log(`sortArguments`, sortArguments);
+
       const terms = await Term.find(filterQuery)
         .skip(skip)
         .limit(perPageNum)
-        .sort({ createdAt: -1 })
+        .sort(sortArguments)
         .exec();
 
       const totalItems = await Term.countDocuments(filterQuery);
